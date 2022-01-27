@@ -1,6 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_project/home_screen.dart';
+import 'package:flutter_project/data/starwars_data_source.dart';
+import 'package:flutter_project/screens/entries_list.dart';
+import 'package:flutter_project/screens/home.dart';
+import 'package:flutter_project/screens/person_details.dart';
+
+import 'data/starwars_entries.dart';
 
 enum DbEntryType {
   people,
@@ -48,16 +53,96 @@ class StarWarsDbRouterDelegate extends RouterDelegate<StarWarsDbPath>
     return Navigator(
       key: navigatorKey,
       pages: [
-        MaterialPage(
-          key: const ValueKey('HomeScreenPage'),
-          child: HomeScreen(),
+        HomeScreenPage(
+          onEntryTypeChanged: (entryType) {
+            this.entryType = entryType;
+            notifyListeners();
+          },
         ),
-        if (entryType != null) MaterialPage(child: Container()),
+        if (entryType == DbEntryType.people) ...[
+          EntriesListScreenPage(
+            entryName: 'People',
+            icon: Icons.person,
+            dataSource: StarWarsDbDataSource('people', (json) => Person.fromJson(json)),
+            onEntryIdChanged: (entryId) {
+              this.entryId = entryId;
+              notifyListeners();
+            },
+          ),
+          if (entryId != null) PersonDetailsScreenPage(id: entryId!)
+        ],
+        if (entryType == DbEntryType.films) ...[
+          EntriesListScreenPage(
+            entryName: 'Films',
+            icon: Icons.movie,
+            dataSource: StarWarsDbDataSource('films', (json) => Film.fromJson(json)),
+            onEntryIdChanged: (entryId) {
+              this.entryId = entryId;
+              notifyListeners();
+            },
+          ),
+        ],
+        if (entryType == DbEntryType.starships) ...[
+          EntriesListScreenPage(
+            entryName: 'Starships',
+            icon: Icons.directions_boat,
+            dataSource: StarWarsDbDataSource('starships', (json) => Starship.fromJson(json)),
+            onEntryIdChanged: (entryId) {
+              this.entryId = entryId;
+              notifyListeners();
+            },
+          ),
+        ],
+        if (entryType == DbEntryType.vehicles) ...[
+          EntriesListScreenPage(
+            entryName: 'Vehicles',
+            icon: Icons.two_wheeler,
+            dataSource: StarWarsDbDataSource('vehicles', (json) => Vehicle.fromJson(json)),
+            onEntryIdChanged: (entryId) {
+              this.entryId = entryId;
+              notifyListeners();
+            },
+          ),
+        ],
+        if (entryType == DbEntryType.species) ...[
+          EntriesListScreenPage(
+            entryName: 'Species',
+            icon: Icons.balcony,
+            dataSource: StarWarsDbDataSource('species', (json) => Species.fromJson(json)),
+            onEntryIdChanged: (entryId) {
+              this.entryId = entryId;
+              notifyListeners();
+            },
+          ),
+        ],
+        if (entryType == DbEntryType.planets) ...[
+          EntriesListScreenPage(
+            entryName: 'Planets',
+            icon: Icons.public,
+            dataSource: StarWarsDbDataSource('planets', (json) => Planet.fromJson(json)),
+            onEntryIdChanged: (entryId) {
+              this.entryId = entryId;
+              notifyListeners();
+            },
+          ),
+        ]
       ],
       onPopPage: (route, result) {
         if (!route.didPop(result)) return false;
 
-        return true;
+        if (profileId != null) {
+          profileId = null;
+          return true;
+        } else if (entryType != null) {
+          if (entryId != null) {
+            entryId = null;
+          } else {
+            entryType = null;
+          }
+          return true;
+        }
+
+        return false;
       },
     );
   }

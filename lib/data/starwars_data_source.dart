@@ -5,7 +5,7 @@ typedef Json = Map<String, dynamic>;
 
 class StarWarsDbDataSource<T extends StarWarsDbEntry> {
   final _baseUrl = 'https://swapi.dev/api';
-  var _nextPageUrl = '';
+  String? _nextPageUrl;
 
   final String entryName;
   T Function(Json) fromJson;
@@ -24,7 +24,9 @@ class StarWarsDbDataSource<T extends StarWarsDbEntry> {
   }
 
   Future<List<T>?> getEntriesNextPage() async {
-    Response<Json> response = await Dio().get(_nextPageUrl);
+    if (_nextPageUrl == null) return List.empty();
+
+    Response<Json> response = await Dio().get(_nextPageUrl!);
 
     if (response.statusCode == 200) {
       _nextPageUrl = response.data!['next'];
