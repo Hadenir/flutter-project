@@ -2,8 +2,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_project/data/starwars_data_source.dart';
 import 'package:flutter_project/screens/entries_list.dart';
+import 'package:flutter_project/screens/entry_details_page.dart';
+import 'package:flutter_project/screens/film_details.dart';
 import 'package:flutter_project/screens/home.dart';
 import 'package:flutter_project/screens/person_details.dart';
+import 'package:flutter_project/screens/planet_details.dart';
+import 'package:flutter_project/screens/species_details.dart';
+import 'package:flutter_project/screens/starship_details.dart';
+import 'package:flutter_project/screens/vehicle_details.dart';
 
 import 'data/starwars_entries.dart';
 
@@ -14,6 +20,13 @@ enum DbEntryType {
   vehicles,
   species,
   planets,
+}
+
+class DbEntryDto {
+  final DbEntryType entryType;
+  final int entryId;
+
+  DbEntryDto(this.entryType, this.entryId);
 }
 
 class StarWarsDbPath {}
@@ -69,7 +82,17 @@ class StarWarsDbRouterDelegate extends RouterDelegate<StarWarsDbPath>
               notifyListeners();
             },
           ),
-          if (entryId != null) PersonDetailsScreenPage(id: entryId!)
+          if (entryId != null)
+            EntryDetailsScreenPage(
+              screen: PersonDetailsScreen(
+                id: entryId!,
+                onEntryChanged: (entryDto) {
+                  entryType = entryDto.entryType;
+                  entryId = entryDto.entryId;
+                  notifyListeners();
+                },
+              ),
+            )
         ],
         if (entryType == DbEntryType.films) ...[
           EntriesListScreenPage(
@@ -81,6 +104,17 @@ class StarWarsDbRouterDelegate extends RouterDelegate<StarWarsDbPath>
               notifyListeners();
             },
           ),
+          if (entryId != null)
+            EntryDetailsScreenPage(
+              screen: FilmDetailsScreen(
+                id: entryId!,
+                onEntryChanged: (entryDto) {
+                  entryType = entryDto.entryType;
+                  entryId = entryDto.entryId;
+                  notifyListeners();
+                },
+              ),
+            )
         ],
         if (entryType == DbEntryType.starships) ...[
           EntriesListScreenPage(
@@ -92,6 +126,17 @@ class StarWarsDbRouterDelegate extends RouterDelegate<StarWarsDbPath>
               notifyListeners();
             },
           ),
+          if (entryId != null)
+            EntryDetailsScreenPage(
+              screen: StarshipDetailsScreen(
+                id: entryId!,
+                onEntryChanged: (entryDto) {
+                  entryType = entryDto.entryType;
+                  entryId = entryDto.entryId;
+                  notifyListeners();
+                },
+              ),
+            )
         ],
         if (entryType == DbEntryType.vehicles) ...[
           EntriesListScreenPage(
@@ -103,6 +148,17 @@ class StarWarsDbRouterDelegate extends RouterDelegate<StarWarsDbPath>
               notifyListeners();
             },
           ),
+          if (entryId != null)
+            EntryDetailsScreenPage(
+              screen: VehicleDetailsScreen(
+                id: entryId!,
+                onEntryChanged: (entryDto) {
+                  entryType = entryDto.entryType;
+                  entryId = entryDto.entryId;
+                  notifyListeners();
+                },
+              ),
+            )
         ],
         if (entryType == DbEntryType.species) ...[
           EntriesListScreenPage(
@@ -114,6 +170,17 @@ class StarWarsDbRouterDelegate extends RouterDelegate<StarWarsDbPath>
               notifyListeners();
             },
           ),
+          if (entryId != null)
+            EntryDetailsScreenPage(
+              screen: SpeciesDetailsScreen(
+                id: entryId!,
+                onEntryChanged: (entryDto) {
+                  entryType = entryDto.entryType;
+                  entryId = entryDto.entryId;
+                  notifyListeners();
+                },
+              ),
+            )
         ],
         if (entryType == DbEntryType.planets) ...[
           EntriesListScreenPage(
@@ -125,6 +192,17 @@ class StarWarsDbRouterDelegate extends RouterDelegate<StarWarsDbPath>
               notifyListeners();
             },
           ),
+          if (entryId != null)
+            EntryDetailsScreenPage(
+              screen: PlanetDetailsScreen(
+                id: entryId!,
+                onEntryChanged: (entryDto) {
+                  entryType = entryDto.entryType;
+                  entryId = entryDto.entryId;
+                  notifyListeners();
+                },
+              ),
+            )
         ]
       ],
       onPopPage: (route, result) {

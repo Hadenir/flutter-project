@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_project/data/starwars_data_source.dart';
 import 'package:flutter_project/data/starwars_entries.dart';
+import 'package:flutter_project/widgets/entry_details.dart';
 
 class EntriesListScreenPage<E extends StarWarsDbEntry> extends Page {
   final String entryName;
@@ -71,7 +72,7 @@ class _EntriesListScreenState<E extends StarWarsDbEntry> extends State<EntriesLi
                   Expanded(
                     child: Scrollbar(
                       child: ListView.separated(
-                        itemBuilder: (context, i) => ListTile<E>(
+                        itemBuilder: (context, i) => EntryListTile<E>(
                           _entries[i],
                           icon: widget.icon,
                           onTap: () => widget.onEntryIdChanged(_entries[i].id),
@@ -112,45 +113,5 @@ class _EntriesListScreenState<E extends StarWarsDbEntry> extends State<EntriesLi
         }
       });
     }
-  }
-}
-
-class ListTile<E extends StarWarsDbEntry> extends StatelessWidget {
-  final E entry;
-  final VoidCallback? onTap;
-  final IconData icon;
-
-  ListTile(this.entry, {required this.icon, this.onTap}) : super(key: ValueKey(entry));
-
-  @override
-  Widget build(BuildContext context) {
-    return Ink(
-      decoration: const BoxDecoration(
-        color: Colors.grey,
-        borderRadius: BorderRadius.all(Radius.circular(5)),
-        boxShadow: [
-          BoxShadow(
-            spreadRadius: 1,
-            blurRadius: 7,
-          )
-        ],
-      ),
-      child: InkWell(
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.all(8),
-          child: Container(
-            constraints: const BoxConstraints(minHeight: 64),
-            child: Row(
-              children: [
-                Icon(icon, size: 64),
-                const SizedBox(width: 8),
-                Text(entry.displayName),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
   }
 }
