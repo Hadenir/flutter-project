@@ -1,4 +1,5 @@
 import 'package:flutter_project/data/starwars_data_source.dart';
+import 'package:flutter_project/navigation.dart';
 
 int? extractIdFromUrl(String? url) {
   if (url != null) {
@@ -9,8 +10,9 @@ int? extractIdFromUrl(String? url) {
 
 abstract class StarWarsDbEntry {
   final int id;
+  final DbEntryType entryType;
 
-  StarWarsDbEntry(this.id);
+  StarWarsDbEntry(this.id, this.entryType);
 
   String get displayName;
 }
@@ -43,7 +45,7 @@ class Person extends StarWarsDbEntry {
     required this.starshipIds,
     required this.vehicleIds,
     required this.filmIds,
-  }) : super(id);
+  }) : super(id, DbEntryType.people);
 
   factory Person.fromJson(Json json) {
     return Person._(
@@ -92,7 +94,7 @@ class Film extends StarWarsDbEntry {
     required this.starshipIds,
     required this.vehicleIds,
     required this.speciesIds,
-  }) : super(id);
+  }) : super(id, DbEntryType.films);
 
   factory Film.fromJson(Json json) {
     return Film._(
@@ -140,7 +142,7 @@ class Starship extends StarWarsDbEntry {
     required this.cost,
     required this.filmIds,
     required this.pilotIds,
-  }) : super(id);
+  }) : super(id, DbEntryType.starships);
 
   factory Starship.fromJson(Json json) {
     return Starship._(
@@ -185,7 +187,7 @@ class Vehicle extends StarWarsDbEntry {
     required this.cost,
     required this.filmIds,
     required this.pilotIds,
-  }) : super(id);
+  }) : super(id, DbEntryType.vehicles);
 
   factory Vehicle.fromJson(Json json) {
     return Vehicle._(
@@ -231,7 +233,7 @@ class Species extends StarWarsDbEntry {
     required this.homeworldId,
     required this.peopleIds,
     required this.filmIds,
-  }) : super(id);
+  }) : super(id, DbEntryType.species);
 
   factory Species.fromJson(Json json) {
     return Species._(
@@ -278,7 +280,7 @@ class Planet extends StarWarsDbEntry {
     required this.diameter,
     required this.residentIds,
     required this.filmIds,
-  }) : super(id);
+  }) : super(id, DbEntryType.planets);
 
   factory Planet.fromJson(Json json) {
     return Planet._(

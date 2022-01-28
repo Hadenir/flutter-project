@@ -60,6 +60,20 @@ class _PlanetDetailsScreenState extends State<PlanetDetailsScreen> {
                   DetailsEntry(
                       name: 'Diameter',
                       value: _planet!.diameter != null ? _planet!.diameter!.toString() + ' km' : 'unknown'),
+                  RelatedEntriesList(
+                    _planet!.residentIds,
+                    header: 'Residents',
+                    icon: Icons.person,
+                    dataSource: StarWarsDbDataSource('people', (json) => Person.fromJson(json)),
+                    onTap: widget.onEntryChanged,
+                  ),
+                  RelatedEntriesList(
+                    _planet!.filmIds,
+                    header: 'Films',
+                    icon: Icons.movie,
+                    dataSource: StarWarsDbDataSource('films', (json) => Film.fromJson(json)),
+                    onTap: widget.onEntryChanged,
+                  ),
                 ],
               ),
             ),
