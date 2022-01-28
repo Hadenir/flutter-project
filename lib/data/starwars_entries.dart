@@ -101,7 +101,7 @@ class Film extends StarWarsDbEntry {
       id: extractIdFromUrl(json['url']),
       episode: json['episode_id'],
       title: json['title'],
-      openingCrawl: json['opening_crawl'],
+      openingCrawl: json['opening_crawl'].replaceAll('\r\n\r\n', '\n\n').replaceAll('\r\n', ' '),
       director: json['director'],
       producer: json['producer'],
       releaseDate: DateTime.parse(json['release_date']),

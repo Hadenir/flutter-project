@@ -1,3 +1,4 @@
+import 'package:flutter_project/widgets/star_wars_crawl.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_project/data/starwars_data_source.dart';
@@ -32,6 +33,8 @@ class _FilmDetailsScreenState extends State<FilmDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // return Scaffold(body: StarWarsCrawl());
+
     return Scaffold(
       appBar: AppBar(
         title: _film != null ? Text(_film!.displayName) : null,
@@ -42,13 +45,20 @@ class _FilmDetailsScreenState extends State<FilmDetailsScreen> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(Icons.movie, size: 256),
+                  SizedBox(
+                    height: 350,
+                    child: StarWarsCrawl(
+                      'Episode ${_film!.episode}\n${_film!.title.toUpperCase()}\n',
+                      _film!.openingCrawl,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
                   Text(_film!.title, style: Theme.of(context).textTheme.headline4),
                   const SizedBox(height: 8),
-                  // TODO: Opening Crawl
                   DetailsEntry(name: 'Director', value: _film!.director),
                   DetailsEntry(name: 'Producer', value: _film!.producer),
                   DetailsEntry(name: 'Release date', value: DateFormat('dd.MM.yyyy').format(_film!.releaseDate)),
+                  const SizedBox(height: 16),
                   const SizedBox(height: 16),
                   RelatedEntriesList(
                     _film!.characterIds,

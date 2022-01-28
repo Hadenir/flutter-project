@@ -85,10 +85,14 @@ class _RelatedEntriesListState<E extends StarWarsDbEntry> extends State<RelatedE
 
   @override
   void initState() {
-    Future.wait(widget.ids.map((id) => widget.dataSource.getSingleEntry(id))).then((entries) => setState(() {
+    Future.wait(widget.ids.map((id) => widget.dataSource.getSingleEntry(id))).then((entries) {
+      if (mounted) {
+        setState(() {
           _entries = entries.where((x) => x != null).cast<E>().toList();
           _isLoading = false;
-        }));
+        });
+      }
+    });
 
     super.initState();
   }
