@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_project/data/starwars_entries.dart';
-import 'package:flutter_project/screens/home.dart';
+import 'package:flutter_project/screens/home_screen.dart';
 
 abstract class StarWarsDbPageConfig extends Equatable {
   Page get page;

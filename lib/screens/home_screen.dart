@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_project/data/starwars_entries.dart';
@@ -26,7 +28,7 @@ class HomeScreen extends StatelessWidget {
         title: const Text('Star Wars Database'),
       ),
       body: GridView.count(
-        crossAxisCount: 2,
+        crossAxisCount: min(MediaQuery.of(context).size.width ~/ 175, 6),
         mainAxisSpacing: 8,
         crossAxisSpacing: 8,
         padding: const EdgeInsets.all(8),
