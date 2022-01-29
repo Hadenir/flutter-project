@@ -276,7 +276,7 @@ class _CrawlingText extends StatelessWidget {
           child: FittedBox(
               child: Container(
                   constraints: BoxConstraints(
-                    maxWidth: maxWidthConstraint * 1.6,
+                    maxWidth: min(maxWidthConstraint * 1.6, 1000),
                   ),
                   child: Column(
                     children: [

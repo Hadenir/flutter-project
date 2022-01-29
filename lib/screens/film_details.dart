@@ -46,7 +46,7 @@ class _FilmDetailsScreenState extends State<FilmDetailsScreen> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   SizedBox(
-                    height: 350,
+                    height: 400,
                     child: StarWarsCrawl(
                       'Episode ${_film!.episode}\n${_film!.title.toUpperCase()}\n',
                       _film!.openingCrawl,

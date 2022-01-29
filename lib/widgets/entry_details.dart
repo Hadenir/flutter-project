@@ -12,7 +12,7 @@ class EntryListTile<E extends StarWarsDbEntry> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Ink(
+    return Container(
       decoration: const BoxDecoration(
         color: Colors.grey,
         borderRadius: BorderRadius.all(Radius.circular(5)),
@@ -23,18 +23,21 @@ class EntryListTile<E extends StarWarsDbEntry> extends StatelessWidget {
           )
         ],
       ),
-      child: InkWell(
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.all(8),
-          child: Container(
-            constraints: const BoxConstraints(minHeight: 64),
-            child: Row(
-              children: [
-                Icon(icon, size: 64),
-                const SizedBox(width: 8),
-                Text(entry.displayName),
-              ],
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          child: Padding(
+            padding: const EdgeInsets.all(8),
+            child: Container(
+              constraints: const BoxConstraints(minHeight: 64),
+              child: Row(
+                children: [
+                  Icon(icon, size: 64),
+                  const SizedBox(width: 8),
+                  Text(entry.displayName),
+                ],
+              ),
             ),
           ),
         ),
