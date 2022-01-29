@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_project/data/starwars_data_source.dart';
 import 'package:flutter_project/data/starwars_entries.dart';
-import 'package:flutter_project/navigation.dart';
 import 'package:flutter_project/widgets/entry_details.dart';
 
 class StarshipDetailsScreen extends StatefulWidget {
   final int id;
-  final ValueChanged<DbEntryDto> onEntryChanged;
 
-  const StarshipDetailsScreen({required this.id, required this.onEntryChanged})
-      : super(key: const ValueKey('StarshipDetailsScreen'));
+  const StarshipDetailsScreen({required this.id}) : super(key: const ValueKey('StarshipDetailsScreen'));
 
   @override
   State<StarshipDetailsScreen> createState() => _StarshipDetailsScreenState();
@@ -61,14 +58,12 @@ class _StarshipDetailsScreenState extends State<StarshipDetailsScreen> {
                     header: 'Films',
                     icon: Icons.movie,
                     dataSource: StarWarsDbDataSource('films', (json) => Film.fromJson(json)),
-                    onTap: widget.onEntryChanged,
                   ),
                   RelatedEntriesList(
                     _starship!.pilotIds,
                     header: 'Pilots',
                     icon: Icons.person,
                     dataSource: StarWarsDbDataSource('people', (json) => Person.fromJson(json)),
-                    onTap: widget.onEntryChanged,
                   ),
                 ],
               ),

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_project/data/starwars_data_source.dart';
 import 'package:flutter_project/data/starwars_entries.dart';
-import 'package:flutter_project/navigation.dart';
+import 'package:flutter_project/navigation/navigation_stack.dart';
+import 'package:flutter_project/navigation/page_config.dart';
 
 class EntryListTile<E extends StarWarsDbEntry> extends StatelessWidget {
   final E entry;
@@ -72,10 +74,8 @@ class RelatedEntriesList<E extends StarWarsDbEntry> extends StatefulWidget {
   final StarWarsDbDataSource<E> dataSource;
   final String header;
   final IconData icon;
-  final ValueChanged<DbEntryDto> onTap;
 
-  RelatedEntriesList(this.ids,
-      {required this.header, required this.icon, required this.dataSource, required this.onTap})
+  RelatedEntriesList(this.ids, {required this.header, required this.icon, required this.dataSource})
       : super(key: ValueKey(dataSource));
 
   @override
@@ -115,11 +115,10 @@ class _RelatedEntriesListState<E extends StarWarsDbEntry> extends State<RelatedE
                 ListView.builder(
                   itemBuilder: (context, i) => Padding(
                     padding: const EdgeInsets.symmetric(vertical: 4),
-                    child: EntryListTile<E>(
-                      _entries[i],
-                      icon: widget.icon,
-                      onTap: () => widget.onTap(DbEntryDto(_entries[i].entryType, _entries[i].id)),
-                    ),
+                    child: EntryListTile<E>(_entries[i],
+                        icon: widget.icon,
+                        onTap: () => BlocProvider.of<NavigationCubit>(context)
+                            .push(DatabaseEntryPathConfig.fromEntry(_entries[i]))),
                   ),
                   itemCount: _entries.length,
                   padding: const EdgeInsets.all(8),

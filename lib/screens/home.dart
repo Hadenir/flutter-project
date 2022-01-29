@@ -1,24 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_project/navigation.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_project/data/starwars_entries.dart';
+import 'package:flutter_project/navigation/navigation_stack.dart';
+import 'package:flutter_project/navigation/page_config.dart';
 
 class HomeScreenPage extends Page {
-  final ValueChanged<DbEntryType> onEntryTypeChanged;
-
-  const HomeScreenPage({required this.onEntryTypeChanged}) : super(key: const ValueKey('HomeScreenPage'));
+  const HomeScreenPage() : super(key: const ValueKey('HomeScreenPage'));
 
   @override
   Route createRoute(BuildContext context) {
     return MaterialPageRoute(
       settings: this,
-      builder: (context) => HomeScreen(onEntryTypeChanged: onEntryTypeChanged),
+      builder: (context) => const HomeScreen(),
     );
   }
 }
 
 class HomeScreen extends StatelessWidget {
-  final ValueChanged<DbEntryType> onEntryTypeChanged;
-
-  const HomeScreen({required this.onEntryTypeChanged}) : super(key: const ValueKey('HomeScreen'));
+  const HomeScreen() : super(key: const ValueKey('HomeScreen'));
 
   @override
   Widget build(BuildContext context) {
@@ -35,32 +34,38 @@ class HomeScreen extends StatelessWidget {
           GridTile(
             title: 'People',
             icon: const Icon(Icons.person),
-            onTap: () => onEntryTypeChanged(DbEntryType.people),
+            onTap: () => BlocProvider.of<NavigationCubit>(context)
+                .push(DatabaseEntriesListPageConfig(entryType: DbEntryType.person)),
           ),
           GridTile(
             title: 'Films',
             icon: const Icon(Icons.movie),
-            onTap: () => onEntryTypeChanged(DbEntryType.films),
+            onTap: () => BlocProvider.of<NavigationCubit>(context)
+                .push(DatabaseEntriesListPageConfig(entryType: DbEntryType.film)),
           ),
           GridTile(
             title: 'Starships',
             icon: const Icon(Icons.directions_boat_filled),
-            onTap: () => onEntryTypeChanged(DbEntryType.starships),
+            onTap: () => BlocProvider.of<NavigationCubit>(context)
+                .push(DatabaseEntriesListPageConfig(entryType: DbEntryType.starship)),
           ),
           GridTile(
             title: 'Vehicles',
             icon: const Icon(Icons.two_wheeler),
-            onTap: () => onEntryTypeChanged(DbEntryType.vehicles),
+            onTap: () => BlocProvider.of<NavigationCubit>(context)
+                .push(DatabaseEntriesListPageConfig(entryType: DbEntryType.vehicle)),
           ),
           GridTile(
             title: 'Species',
             icon: const Icon(Icons.balcony),
-            onTap: () => onEntryTypeChanged(DbEntryType.species),
+            onTap: () => BlocProvider.of<NavigationCubit>(context)
+                .push(DatabaseEntriesListPageConfig(entryType: DbEntryType.species)),
           ),
           GridTile(
             title: 'Planets',
             icon: const Icon(Icons.public),
-            onTap: () => onEntryTypeChanged(DbEntryType.planets),
+            onTap: () => BlocProvider.of<NavigationCubit>(context)
+                .push(DatabaseEntriesListPageConfig(entryType: DbEntryType.planet)),
           ),
         ],
       ),
@@ -77,7 +82,7 @@ class GridTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Ink(
+    return Container(
       decoration: const BoxDecoration(
         color: Colors.grey,
         borderRadius: BorderRadius.all(Radius.circular(5)),
@@ -88,25 +93,28 @@ class GridTile extends StatelessWidget {
           )
         ],
       ),
-      child: InkWell(
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.all(8),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Expanded(
-                  child: Padding(
-                padding: const EdgeInsets.all(24),
-                child: FittedBox(child: icon),
-              )),
-              Center(
-                child: Text(
-                  title,
-                  style: const TextStyle(fontSize: 20),
-                ),
-              )
-            ],
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          child: Padding(
+            padding: const EdgeInsets.all(8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Expanded(
+                    child: Padding(
+                  padding: const EdgeInsets.all(24),
+                  child: FittedBox(child: icon),
+                )),
+                Center(
+                  child: Text(
+                    title,
+                    style: const TextStyle(fontSize: 20),
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),

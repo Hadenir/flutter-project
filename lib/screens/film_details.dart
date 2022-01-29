@@ -3,15 +3,12 @@ import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_project/data/starwars_data_source.dart';
 import 'package:flutter_project/data/starwars_entries.dart';
-import 'package:flutter_project/navigation.dart';
 import 'package:flutter_project/widgets/entry_details.dart';
 
 class FilmDetailsScreen extends StatefulWidget {
   final int id;
-  final ValueChanged<DbEntryDto> onEntryChanged;
 
-  const FilmDetailsScreen({required this.id, required this.onEntryChanged})
-      : super(key: const ValueKey('FilmDetailsScreen'));
+  const FilmDetailsScreen({required this.id}) : super(key: const ValueKey('FilmDetailsScreen'));
 
   @override
   State<FilmDetailsScreen> createState() => _FilmDetailsScreenState();
@@ -33,8 +30,6 @@ class _FilmDetailsScreenState extends State<FilmDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // return Scaffold(body: StarWarsCrawl());
-
     return Scaffold(
       appBar: AppBar(
         title: _film != null ? Text(_film!.displayName) : null,
@@ -65,35 +60,30 @@ class _FilmDetailsScreenState extends State<FilmDetailsScreen> {
                     header: 'Characters',
                     icon: Icons.person,
                     dataSource: StarWarsDbDataSource('people', (json) => Person.fromJson(json)),
-                    onTap: widget.onEntryChanged,
                   ),
                   RelatedEntriesList(
                     _film!.planetIds,
                     header: 'Planets',
                     icon: Icons.public,
                     dataSource: StarWarsDbDataSource('planets', (json) => Planet.fromJson(json)),
-                    onTap: widget.onEntryChanged,
                   ),
                   RelatedEntriesList(
                     _film!.starshipIds,
                     header: 'Starships',
                     icon: Icons.directions_boat,
                     dataSource: StarWarsDbDataSource('starships', (json) => Starship.fromJson(json)),
-                    onTap: widget.onEntryChanged,
                   ),
                   RelatedEntriesList(
                     _film!.vehicleIds,
                     header: 'Vehicles',
                     icon: Icons.two_wheeler,
                     dataSource: StarWarsDbDataSource('vehicles', (json) => Vehicle.fromJson(json)),
-                    onTap: widget.onEntryChanged,
                   ),
                   RelatedEntriesList(
                     _film!.speciesIds,
                     header: 'Species',
                     icon: Icons.balcony,
                     dataSource: StarWarsDbDataSource('species', (json) => Species.fromJson(json)),
-                    onTap: widget.onEntryChanged,
                   ),
                 ],
               ),

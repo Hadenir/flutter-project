@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_project/navigation.dart';
+import 'package:flutter_project/navigation/navigation.dart';
 
 void main() {
   runApp(const StarWarsDbApp());
@@ -20,8 +20,8 @@ class StarWarsDbApp extends StatefulWidget {
 }
 
 class _StarWarsDbAppState extends State<StarWarsDbApp> {
-  final StarWarsDbRouterDelegate _routerDelegate = StarWarsDbRouterDelegate();
-  final StarWarsDbRouteInformationParser _routeInformationParser = StarWarsDbRouteInformationParser();
+  final _routerDelegate = NavigationRouterDelegate();
+  final _routeInformationParser = NavigationRouteInformationParser();
 
   @override
   Widget build(BuildContext context) {

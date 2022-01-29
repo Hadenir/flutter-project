@@ -1,41 +1,39 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_project/data/starwars_data_source.dart';
 import 'package:flutter_project/data/starwars_entries.dart';
+import 'package:flutter_project/navigation/navigation_stack.dart';
+import 'package:flutter_project/navigation/page_config.dart';
 import 'package:flutter_project/widgets/entry_details.dart';
 
 class EntriesListScreenPage<E extends StarWarsDbEntry> extends Page {
-  final String entryName;
+  final String title;
   final IconData icon;
-  final ValueChanged<int> onEntryIdChanged;
   final StarWarsDbDataSource<E> dataSource;
 
-  EntriesListScreenPage(
-      {required this.entryName, required this.icon, required this.dataSource, required this.onEntryIdChanged})
-      : super(key: ValueKey(entryName + 'ListScreenPage'));
+  EntriesListScreenPage({required this.title, required this.icon, required this.dataSource})
+      : super(key: ValueKey(title + 'ListScreenPage'));
 
   @override
   Route createRoute(BuildContext context) {
     return MaterialPageRoute(
       settings: this,
       builder: (context) => EntriesListScreen<E>(
-        entryName: entryName,
+        title: title,
         icon: icon,
         dataSource: dataSource,
-        onEntryIdChanged: onEntryIdChanged,
       ),
     );
   }
 }
 
 class EntriesListScreen<E extends StarWarsDbEntry> extends StatefulWidget {
-  final String entryName;
+  final String title;
   final IconData icon;
-  final ValueChanged<int> onEntryIdChanged;
   final StarWarsDbDataSource<E> dataSource;
 
-  EntriesListScreen(
-      {required this.entryName, required this.icon, required this.dataSource, required this.onEntryIdChanged})
-      : super(key: ValueKey(entryName + 'ListScreen'));
+  EntriesListScreen({required this.title, required this.icon, required this.dataSource})
+      : super(key: ValueKey(title + 'ListScreen'));
 
   @override
   State<EntriesListScreen> createState() => _EntriesListScreenState<E>();
@@ -63,7 +61,7 @@ class _EntriesListScreenState<E extends StarWarsDbEntry> extends State<EntriesLi
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Star Wars Db - ' + widget.entryName),
+          title: Text('Star Wars Db - ' + widget.title),
         ),
         body: _isLoading
             ? const Center(child: CircularProgressIndicator())
@@ -75,7 +73,8 @@ class _EntriesListScreenState<E extends StarWarsDbEntry> extends State<EntriesLi
                         itemBuilder: (context, i) => EntryListTile<E>(
                           _entries[i],
                           icon: widget.icon,
-                          onTap: () => widget.onEntryIdChanged(_entries[i].id),
+                          onTap: () => BlocProvider.of<NavigationCubit>(context)
+                              .push(DatabaseEntryPathConfig.fromEntry(_entries[i])),
                         ),
                         separatorBuilder: (context, i) => const SizedBox(height: 8),
                         itemCount: _entries.length,

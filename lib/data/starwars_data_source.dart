@@ -1,8 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_project/data/starwars_entries.dart';
 
-typedef Json = Map<String, dynamic>;
-
 class StarWarsDbDataSource<T extends StarWarsDbEntry> {
   final _baseUrl = 'https://swapi.dev/api';
   String? _nextPageUrl;

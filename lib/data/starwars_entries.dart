@@ -1,10 +1,115 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_project/data/starwars_data_source.dart';
-import 'package:flutter_project/navigation.dart';
+import 'package:flutter_project/screens/entries_list.dart';
+import 'package:flutter_project/screens/entry_details_page.dart';
+import 'package:flutter_project/screens/film_details.dart';
+import 'package:flutter_project/screens/person_details.dart';
+import 'package:flutter_project/screens/planet_details.dart';
+import 'package:flutter_project/screens/species_details.dart';
+import 'package:flutter_project/screens/starship_details.dart';
+import 'package:flutter_project/screens/vehicle_details.dart';
 
-int? extractIdFromUrl(String? url) {
-  if (url != null) {
-    var uri = Uri.parse(url);
-    return int.tryParse(uri.pathSegments[2]);
+typedef Json = Map<String, dynamic>;
+
+enum DbEntryType {
+  person,
+  film,
+  starship,
+  vehicle,
+  species,
+  planet,
+}
+
+extension DbEntryTypeParser on DbEntryType {
+  static DbEntryType? tryParse(String? entryTypeName) {
+    if (entryTypeName == null) return null;
+
+    switch (entryTypeName) {
+      case 'people':
+        return DbEntryType.person;
+      case 'films':
+        return DbEntryType.film;
+      case 'starships':
+        return DbEntryType.starship;
+      case 'vehicles':
+        return DbEntryType.vehicle;
+      case 'species':
+        return DbEntryType.species;
+      case 'planets':
+        return DbEntryType.planet;
+      default:
+        return null;
+    }
+  }
+}
+
+extension DbEntryTypeMapper on DbEntryType {
+  EntriesListScreenPage mapToListPage() {
+    String title;
+    IconData icon;
+    StarWarsDbDataSource dataSource;
+
+    switch (this) {
+      case DbEntryType.person:
+        title = 'People';
+        icon = Icons.person;
+        dataSource = StarWarsDbDataSource('people', (json) => Person.fromJson(json));
+        break;
+      case DbEntryType.film:
+        title = 'Films';
+        icon = Icons.movie;
+        dataSource = StarWarsDbDataSource('films', (json) => Film.fromJson(json));
+        break;
+      case DbEntryType.starship:
+        title = 'Starships';
+        icon = Icons.directions_boat;
+        dataSource = StarWarsDbDataSource('starships', (json) => Starship.fromJson(json));
+        break;
+      case DbEntryType.vehicle:
+        title = 'Vehicles';
+        icon = Icons.two_wheeler;
+        dataSource = StarWarsDbDataSource('vehicles', (json) => Vehicle.fromJson(json));
+        break;
+      case DbEntryType.species:
+        title = 'Species';
+        icon = Icons.balcony;
+        dataSource = StarWarsDbDataSource('species', (json) => Species.fromJson(json));
+        break;
+      case DbEntryType.planet:
+        title = 'Planet';
+        icon = Icons.public;
+        dataSource = StarWarsDbDataSource('planets', (json) => Planet.fromJson(json));
+        break;
+    }
+
+    return EntriesListScreenPage(title: title, icon: icon, dataSource: dataSource);
+  }
+
+  EntryDetailsScreenPage mapToDetailsPage(int id) {
+    Widget screen;
+
+    switch (this) {
+      case DbEntryType.person:
+        screen = PersonDetailsScreen(id: id);
+        break;
+      case DbEntryType.film:
+        screen = FilmDetailsScreen(id: id);
+        break;
+      case DbEntryType.starship:
+        screen = StarshipDetailsScreen(id: id);
+        break;
+      case DbEntryType.vehicle:
+        screen = VehicleDetailsScreen(id: id);
+        break;
+      case DbEntryType.species:
+        screen = SpeciesDetailsScreen(id: id);
+        break;
+      case DbEntryType.planet:
+        screen = PlanetDetailsScreen(id: id);
+        break;
+    }
+
+    return EntryDetailsScreenPage(screen: screen);
   }
 }
 
@@ -45,21 +150,21 @@ class Person extends StarWarsDbEntry {
     required this.starshipIds,
     required this.vehicleIds,
     required this.filmIds,
-  }) : super(id, DbEntryType.people);
+  }) : super(id, DbEntryType.person);
 
   factory Person.fromJson(Json json) {
     return Person._(
-      id: extractIdFromUrl(json['url']),
+      id: _extractIdFromUrl(json['url']),
       name: json['name'],
       birthYear: json['birth_year'],
       gender: json['gender'],
       height: int.tryParse(json['height']),
       mass: int.tryParse(json['mass']),
-      homeworldId: extractIdFromUrl(json['homeworld']),
-      speciesIds: json['species'].map((x) => extractIdFromUrl(x)).cast<int>().toList(),
-      starshipIds: json['starships'].map((x) => extractIdFromUrl(x)).cast<int>().toList(),
-      vehicleIds: json['vehicles'].map((x) => extractIdFromUrl(x)).cast<int>().toList(),
-      filmIds: json['films'].map((x) => extractIdFromUrl(x)).cast<int>().toList(),
+      homeworldId: _extractIdFromUrl(json['homeworld']),
+      speciesIds: json['species'].map((x) => _extractIdFromUrl(x)).cast<int>().toList(),
+      starshipIds: json['starships'].map((x) => _extractIdFromUrl(x)).cast<int>().toList(),
+      vehicleIds: json['vehicles'].map((x) => _extractIdFromUrl(x)).cast<int>().toList(),
+      filmIds: json['films'].map((x) => _extractIdFromUrl(x)).cast<int>().toList(),
     );
   }
 }
@@ -94,22 +199,22 @@ class Film extends StarWarsDbEntry {
     required this.starshipIds,
     required this.vehicleIds,
     required this.speciesIds,
-  }) : super(id, DbEntryType.films);
+  }) : super(id, DbEntryType.film);
 
   factory Film.fromJson(Json json) {
     return Film._(
-      id: extractIdFromUrl(json['url']),
+      id: _extractIdFromUrl(json['url']),
       episode: json['episode_id'],
       title: json['title'],
       openingCrawl: json['opening_crawl'].replaceAll('\r\n\r\n', '\n\n').replaceAll('\r\n', ' '),
       director: json['director'],
       producer: json['producer'],
       releaseDate: DateTime.parse(json['release_date']),
-      characterIds: json['characters'].map((x) => extractIdFromUrl(x)).cast<int>().toList(),
-      planetIds: json['planets'].map((x) => extractIdFromUrl(x)).cast<int>().toList(),
-      speciesIds: json['species'].map((x) => extractIdFromUrl(x)).cast<int>().toList(),
-      starshipIds: json['starships'].map((x) => extractIdFromUrl(x)).cast<int>().toList(),
-      vehicleIds: json['vehicles'].map((x) => extractIdFromUrl(x)).cast<int>().toList(),
+      characterIds: json['characters'].map((x) => _extractIdFromUrl(x)).cast<int>().toList(),
+      planetIds: json['planets'].map((x) => _extractIdFromUrl(x)).cast<int>().toList(),
+      speciesIds: json['species'].map((x) => _extractIdFromUrl(x)).cast<int>().toList(),
+      starshipIds: json['starships'].map((x) => _extractIdFromUrl(x)).cast<int>().toList(),
+      vehicleIds: json['vehicles'].map((x) => _extractIdFromUrl(x)).cast<int>().toList(),
     );
   }
 }
@@ -142,11 +247,11 @@ class Starship extends StarWarsDbEntry {
     required this.cost,
     required this.filmIds,
     required this.pilotIds,
-  }) : super(id, DbEntryType.starships);
+  }) : super(id, DbEntryType.starship);
 
   factory Starship.fromJson(Json json) {
     return Starship._(
-      id: extractIdFromUrl(json['url']),
+      id: _extractIdFromUrl(json['url']),
       name: json['name'],
       model: json['model'],
       manufacturer: json['manufacturer'],
@@ -155,8 +260,8 @@ class Starship extends StarWarsDbEntry {
       passengers: json['passengers'],
       length: double.parse(json['length'].replaceAll(',', '')),
       cost: int.tryParse(json['cost_in_credits']),
-      filmIds: json['films'].map((x) => extractIdFromUrl(x)).cast<int>().toList(),
-      pilotIds: json['pilots'].map((x) => extractIdFromUrl(x)).cast<int>().toList(),
+      filmIds: json['films'].map((x) => _extractIdFromUrl(x)).cast<int>().toList(),
+      pilotIds: json['pilots'].map((x) => _extractIdFromUrl(x)).cast<int>().toList(),
     );
   }
 }
@@ -187,11 +292,11 @@ class Vehicle extends StarWarsDbEntry {
     required this.cost,
     required this.filmIds,
     required this.pilotIds,
-  }) : super(id, DbEntryType.vehicles);
+  }) : super(id, DbEntryType.vehicle);
 
   factory Vehicle.fromJson(Json json) {
     return Vehicle._(
-      id: extractIdFromUrl(json['url']),
+      id: _extractIdFromUrl(json['url']),
       name: json['name'],
       model: json['model'],
       manufacturer: json['manufacturer'],
@@ -199,8 +304,8 @@ class Vehicle extends StarWarsDbEntry {
       passengers: int.tryParse(json['passengers']),
       length: double.tryParse(json['length']),
       cost: int.tryParse(json['cost_in_credits']),
-      filmIds: json['films'].map((x) => extractIdFromUrl(x)).cast<int>().toList(),
-      pilotIds: json['pilots'].map((x) => extractIdFromUrl(x)).cast<int>().toList(),
+      filmIds: json['films'].map((x) => _extractIdFromUrl(x)).cast<int>().toList(),
+      pilotIds: json['pilots'].map((x) => _extractIdFromUrl(x)).cast<int>().toList(),
     );
   }
 }
@@ -237,7 +342,7 @@ class Species extends StarWarsDbEntry {
 
   factory Species.fromJson(Json json) {
     return Species._(
-      id: extractIdFromUrl(json['url']),
+      id: _extractIdFromUrl(json['url']),
       name: json['name'],
       classification: json['classification'],
       skinColors: json['skin_colors'].split(', '),
@@ -245,9 +350,9 @@ class Species extends StarWarsDbEntry {
       eyeColors: json['eye_colors'].split(', '),
       lifespan: json['average_lifespan'],
       language: json['language'],
-      homeworldId: extractIdFromUrl(json['homeworld']),
-      peopleIds: json['people'].map((x) => extractIdFromUrl(x)).cast<int>().toList(),
-      filmIds: json['films'].map((x) => extractIdFromUrl(x)).cast<int>().toList(),
+      homeworldId: _extractIdFromUrl(json['homeworld']),
+      peopleIds: json['people'].map((x) => _extractIdFromUrl(x)).cast<int>().toList(),
+      filmIds: json['films'].map((x) => _extractIdFromUrl(x)).cast<int>().toList(),
     );
   }
 }
@@ -280,11 +385,11 @@ class Planet extends StarWarsDbEntry {
     required this.diameter,
     required this.residentIds,
     required this.filmIds,
-  }) : super(id, DbEntryType.planets);
+  }) : super(id, DbEntryType.planet);
 
   factory Planet.fromJson(Json json) {
     return Planet._(
-      id: extractIdFromUrl(json['url']),
+      id: _extractIdFromUrl(json['url']),
       name: json['name'],
       rotationPeriod: int.tryParse(json['rotation_period']),
       orbitalPeriod: int.tryParse(json['orbital_period']),
@@ -293,8 +398,15 @@ class Planet extends StarWarsDbEntry {
       terrain: json['terrain'],
       population: int.tryParse(json['population']),
       diameter: int.tryParse(json['diameter']),
-      residentIds: json['residents'].map((x) => extractIdFromUrl(x)).cast<int>().toList(),
-      filmIds: json['films'].map((x) => extractIdFromUrl(x)).cast<int>().toList(),
+      residentIds: json['residents'].map((x) => _extractIdFromUrl(x)).cast<int>().toList(),
+      filmIds: json['films'].map((x) => _extractIdFromUrl(x)).cast<int>().toList(),
     );
+  }
+}
+
+int? _extractIdFromUrl(String? url) {
+  if (url != null) {
+    var uri = Uri.parse(url);
+    return int.tryParse(uri.pathSegments[2]);
   }
 }
