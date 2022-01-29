@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_project/data/starwars_data_source.dart';
 import 'package:flutter_project/screens/entries_list.dart';
+import 'package:flutter_project/screens/entries_search.dart';
 import 'package:flutter_project/screens/entry_details_page.dart';
 import 'package:flutter_project/screens/film_details.dart';
 import 'package:flutter_project/screens/person_details.dart';
@@ -44,46 +45,23 @@ extension DbEntryTypeParser on DbEntryType {
 }
 
 extension DbEntryTypeMapper on DbEntryType {
-  EntriesListScreenPage mapToListPage() {
-    String title;
-    IconData icon;
-    StarWarsDbDataSource dataSource;
+  static final _peopleDataSource =
+      StarWarsDbDataSource<Person>('people', DbEntryType.person, (json) => Person.fromJson(json));
+  static final _filmsDataSource = StarWarsDbDataSource<Film>('films', DbEntryType.film, (json) => Film.fromJson(json));
+  static final _starshipsDataSource =
+      StarWarsDbDataSource<Starship>('starships', DbEntryType.starship, (json) => Starship.fromJson(json));
+  static final _vehiclesDataSource =
+      StarWarsDbDataSource<Vehicle>('vehicles', DbEntryType.vehicle, (json) => Vehicle.fromJson(json));
+  static final _speciesDataSource =
+      StarWarsDbDataSource<Species>('species', DbEntryType.species, (json) => Species.fromJson(json));
+  static final _planetsDataSource =
+      StarWarsDbDataSource<Planet>('planets', DbEntryType.planet, (json) => Planet.fromJson(json));
 
-    switch (this) {
-      case DbEntryType.person:
-        title = 'People';
-        icon = Icons.person;
-        dataSource = StarWarsDbDataSource('people', (json) => Person.fromJson(json));
-        break;
-      case DbEntryType.film:
-        title = 'Films';
-        icon = Icons.movie;
-        dataSource = StarWarsDbDataSource('films', (json) => Film.fromJson(json));
-        break;
-      case DbEntryType.starship:
-        title = 'Starships';
-        icon = Icons.directions_boat;
-        dataSource = StarWarsDbDataSource('starships', (json) => Starship.fromJson(json));
-        break;
-      case DbEntryType.vehicle:
-        title = 'Vehicles';
-        icon = Icons.two_wheeler;
-        dataSource = StarWarsDbDataSource('vehicles', (json) => Vehicle.fromJson(json));
-        break;
-      case DbEntryType.species:
-        title = 'Species';
-        icon = Icons.balcony;
-        dataSource = StarWarsDbDataSource('species', (json) => Species.fromJson(json));
-        break;
-      case DbEntryType.planet:
-        title = 'Planet';
-        icon = Icons.public;
-        dataSource = StarWarsDbDataSource('planets', (json) => Planet.fromJson(json));
-        break;
-    }
+  EntriesListScreenPage mapToListPage() =>
+      EntriesListScreenPage(title: getTitle(), icon: getIcon(), dataSource: getDataSource());
 
-    return EntriesListScreenPage(title: title, icon: icon, dataSource: dataSource);
-  }
+  EntriesSearchScreenPage mapToSearchPage() =>
+      EntriesSearchScreenPage(title: getTitle(), icon: getIcon(), dataSource: getDataSource());
 
   EntryDetailsScreenPage mapToDetailsPage(int id) {
     Widget screen;
@@ -110,6 +88,54 @@ extension DbEntryTypeMapper on DbEntryType {
     }
 
     return EntryDetailsScreenPage(screen: screen);
+  }
+
+  String getTitle() {
+    var title = toString();
+    return title[0].toUpperCase() + title.substring(1);
+  }
+
+  IconData getIcon() {
+    switch (this) {
+      case DbEntryType.person:
+        return Icons.person;
+      case DbEntryType.film:
+        return Icons.movie;
+      case DbEntryType.starship:
+        return Icons.directions_boat;
+      case DbEntryType.vehicle:
+        return Icons.two_wheeler;
+      case DbEntryType.species:
+        return Icons.balcony;
+      case DbEntryType.planet:
+        return Icons.public;
+    }
+  }
+
+  StarWarsDbDataSource<T> getDataSource<T extends StarWarsDbEntry>() {
+    StarWarsDbDataSource dataSource;
+    switch (this) {
+      case DbEntryType.person:
+        dataSource = _peopleDataSource;
+        break;
+      case DbEntryType.film:
+        dataSource = _filmsDataSource;
+        break;
+      case DbEntryType.starship:
+        dataSource = _starshipsDataSource;
+        break;
+      case DbEntryType.vehicle:
+        dataSource = _vehiclesDataSource;
+        break;
+      case DbEntryType.species:
+        dataSource = _speciesDataSource;
+        break;
+      case DbEntryType.planet:
+        dataSource = _planetsDataSource;
+        break;
+    }
+
+    return dataSource as StarWarsDbDataSource<T>;
   }
 }
 

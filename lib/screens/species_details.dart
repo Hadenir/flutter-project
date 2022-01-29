@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_project/data/starwars_data_source.dart';
 import 'package:flutter_project/data/starwars_entries.dart';
 import 'package:flutter_project/widgets/entry_details.dart';
 
@@ -13,7 +12,7 @@ class SpeciesDetailsScreen extends StatefulWidget {
 }
 
 class _SpeciesDetailsScreenState extends State<SpeciesDetailsScreen> {
-  final _dataSource = StarWarsDbDataSource('species', (json) => Species.fromJson(json));
+  final _dataSource = DbEntryType.species.getDataSource<Species>();
   Species? _species;
 
   @override
@@ -51,14 +50,12 @@ class _SpeciesDetailsScreenState extends State<SpeciesDetailsScreen> {
                   RelatedEntriesList(
                     [if (_species != null && _species!.homeworldId != null) _species!.homeworldId!],
                     header: 'Homeworld',
-                    icon: Icons.public,
-                    dataSource: StarWarsDbDataSource('planets', (json) => Planet.fromJson(json)),
+                    entryType: DbEntryType.planet,
                   ),
                   RelatedEntriesList(
                     _species!.filmIds,
                     header: 'Films',
-                    icon: Icons.movie,
-                    dataSource: StarWarsDbDataSource('films', (json) => Film.fromJson(json)),
+                    entryType: DbEntryType.film,
                   ),
                 ],
               ),

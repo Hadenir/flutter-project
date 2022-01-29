@@ -27,6 +27,18 @@ class DatabaseEntriesListPageConfig extends StarWarsDbPageConfig {
   List<Object?> get props => [entryType];
 }
 
+class DatabaseEntriesSearchPageConfig extends StarWarsDbPageConfig {
+  final DbEntryType entryType;
+
+  @override
+  Page get page => entryType.mapToSearchPage();
+
+  DatabaseEntriesSearchPageConfig({required this.entryType});
+
+  @override
+  List<Object?> get props => [entryType];
+}
+
 class DatabaseEntryPathConfig extends StarWarsDbPageConfig {
   final DbEntryType entryType;
   final int id;

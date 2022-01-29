@@ -11,7 +11,7 @@ class NavigationRouterDelegate extends RouterDelegate<StarWarsDbPageConfig>
   final _cubit = NavigationCubit([HomePageConfig()]);
 
   @override
-  GlobalKey<NavigatorState>? get navigatorKey => GlobalKey();
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   @override
   StarWarsDbPageConfig? get currentConfiguration => _cubit.state.last;

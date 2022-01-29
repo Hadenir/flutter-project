@@ -75,8 +75,10 @@ class RelatedEntriesList<E extends StarWarsDbEntry> extends StatefulWidget {
   final String header;
   final IconData icon;
 
-  RelatedEntriesList(this.ids, {required this.header, required this.icon, required this.dataSource})
-      : super(key: ValueKey(dataSource));
+  RelatedEntriesList(this.ids, {required this.header, required DbEntryType entryType})
+      : icon = entryType.getIcon(),
+        dataSource = entryType.getDataSource(),
+        super(key: ValueKey(header + 'RelatedEntriesList'));
 
   @override
   State<RelatedEntriesList<E>> createState() => _RelatedEntriesListState<E>();

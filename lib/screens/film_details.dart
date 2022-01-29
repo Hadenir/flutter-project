@@ -1,7 +1,6 @@
 import 'package:flutter_project/widgets/star_wars_crawl.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_project/data/starwars_data_source.dart';
 import 'package:flutter_project/data/starwars_entries.dart';
 import 'package:flutter_project/widgets/entry_details.dart';
 
@@ -15,7 +14,7 @@ class FilmDetailsScreen extends StatefulWidget {
 }
 
 class _FilmDetailsScreenState extends State<FilmDetailsScreen> {
-  final _dataSource = StarWarsDbDataSource('films', (json) => Film.fromJson(json));
+  final _dataSource = DbEntryType.film.getDataSource<Film>();
   Film? _film;
 
   @override
@@ -58,32 +57,27 @@ class _FilmDetailsScreenState extends State<FilmDetailsScreen> {
                   RelatedEntriesList(
                     _film!.characterIds,
                     header: 'Characters',
-                    icon: Icons.person,
-                    dataSource: StarWarsDbDataSource('people', (json) => Person.fromJson(json)),
+                    entryType: DbEntryType.person,
                   ),
                   RelatedEntriesList(
                     _film!.planetIds,
                     header: 'Planets',
-                    icon: Icons.public,
-                    dataSource: StarWarsDbDataSource('planets', (json) => Planet.fromJson(json)),
+                    entryType: DbEntryType.planet,
                   ),
                   RelatedEntriesList(
                     _film!.starshipIds,
                     header: 'Starships',
-                    icon: Icons.directions_boat,
-                    dataSource: StarWarsDbDataSource('starships', (json) => Starship.fromJson(json)),
+                    entryType: DbEntryType.starship,
                   ),
                   RelatedEntriesList(
                     _film!.vehicleIds,
                     header: 'Vehicles',
-                    icon: Icons.two_wheeler,
-                    dataSource: StarWarsDbDataSource('vehicles', (json) => Vehicle.fromJson(json)),
+                    entryType: DbEntryType.vehicle,
                   ),
                   RelatedEntriesList(
                     _film!.speciesIds,
                     header: 'Species',
-                    icon: Icons.balcony,
-                    dataSource: StarWarsDbDataSource('species', (json) => Species.fromJson(json)),
+                    entryType: DbEntryType.species,
                   ),
                 ],
               ),

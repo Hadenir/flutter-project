@@ -62,6 +62,13 @@ class _EntriesListScreenState<E extends StarWarsDbEntry> extends State<EntriesLi
     return Scaffold(
         appBar: AppBar(
           title: Text('Star Wars Db - ' + widget.title),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.search),
+              onPressed: () => BlocProvider.of<NavigationCubit>(context)
+                  .push(DatabaseEntriesSearchPageConfig(entryType: widget.dataSource.entryType)),
+            ),
+          ],
         ),
         body: _isLoading
             ? const Center(child: CircularProgressIndicator())

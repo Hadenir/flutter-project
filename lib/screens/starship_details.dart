@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_project/data/starwars_data_source.dart';
 import 'package:flutter_project/data/starwars_entries.dart';
 import 'package:flutter_project/widgets/entry_details.dart';
 
@@ -13,7 +12,7 @@ class StarshipDetailsScreen extends StatefulWidget {
 }
 
 class _StarshipDetailsScreenState extends State<StarshipDetailsScreen> {
-  final _dataSource = StarWarsDbDataSource('starships', (json) => Starship.fromJson(json));
+  final _dataSource = DbEntryType.starship.getDataSource<Starship>();
   Starship? _starship;
 
   @override
@@ -56,14 +55,12 @@ class _StarshipDetailsScreenState extends State<StarshipDetailsScreen> {
                   RelatedEntriesList(
                     _starship!.filmIds,
                     header: 'Films',
-                    icon: Icons.movie,
-                    dataSource: StarWarsDbDataSource('films', (json) => Film.fromJson(json)),
+                    entryType: DbEntryType.film,
                   ),
                   RelatedEntriesList(
                     _starship!.pilotIds,
                     header: 'Pilots',
-                    icon: Icons.person,
-                    dataSource: StarWarsDbDataSource('people', (json) => Person.fromJson(json)),
+                    entryType: DbEntryType.person,
                   ),
                 ],
               ),
