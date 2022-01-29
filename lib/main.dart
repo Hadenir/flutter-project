@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_project/navigation/navigation.dart';
 
@@ -22,6 +24,9 @@ class StarWarsDbApp extends StatefulWidget {
 class _StarWarsDbAppState extends State<StarWarsDbApp> {
   final _routerDelegate = NavigationRouterDelegate();
   final _routeInformationParser = NavigationRouteInformationParser();
+  final _routeInformationProvider = PlatformRouteInformationProvider(
+    initialRouteInformation: RouteInformation(location: PlatformDispatcher.instance.defaultRouteName),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +35,7 @@ class _StarWarsDbAppState extends State<StarWarsDbApp> {
       theme: ThemeData.dark(),
       routerDelegate: _routerDelegate,
       routeInformationParser: _routeInformationParser,
+      routeInformationProvider: _routeInformationProvider,
     );
   }
 }

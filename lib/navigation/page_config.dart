@@ -41,17 +41,17 @@ class DatabaseEntriesSearchPageConfig extends StarWarsDbPageConfig {
 
 class DatabaseEntryPathConfig extends StarWarsDbPageConfig {
   final DbEntryType entryType;
-  final int id;
+  final int entryId;
 
   @override
-  Page get page => entryType.mapToDetailsPage(id);
+  Page get page => entryType.mapToDetailsPage(entryId);
 
-  DatabaseEntryPathConfig({required this.entryType, required this.id});
+  DatabaseEntryPathConfig({required this.entryType, required this.entryId});
 
   DatabaseEntryPathConfig.fromEntry(StarWarsDbEntry entry)
       : entryType = entry.entryType,
-        id = entry.id;
+        entryId = entry.id;
 
   @override
-  List<Object?> get props => [entryType, id];
+  List<Object?> get props => [entryType, entryId];
 }

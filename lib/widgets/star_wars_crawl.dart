@@ -73,11 +73,11 @@ class _StarWarsCrawlAnimation extends StatelessWidget {
         )),
         spaceOpacity = Tween(begin: 0.0, end: 1.0).animate(CurvedAnimation(
           parent: controller,
-          curve: const Interval(0.12, 0.12, curve: Curves.ease),
+          curve: const Interval(0.1, 0.105, curve: Curves.ease),
         )),
         starWarsLogoOpacityShow = Tween(begin: 0.0, end: 1.0).animate(CurvedAnimation(
           parent: controller,
-          curve: const Interval(0.12, 0.12, curve: Curves.ease),
+          curve: const Interval(0.1, 0.105, curve: Curves.ease),
         )),
         starWarsLogoOpacityHide = Tween(begin: 1.0, end: 0.0).animate(CurvedAnimation(
           parent: controller,

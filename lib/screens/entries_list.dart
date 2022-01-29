@@ -60,53 +60,56 @@ class _EntriesListScreenState<E extends StarWarsDbEntry> extends State<EntriesLi
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Star Wars Db - ' + widget.title),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.search),
-              onPressed: () => BlocProvider.of<NavigationCubit>(context)
-                  .push(DatabaseEntriesSearchPageConfig(entryType: widget.dataSource.entryType)),
-            ),
-          ],
-        ),
-        body: _isLoading
-            ? const Center(child: CircularProgressIndicator())
-            : Column(
-                children: [
-                  Expanded(
-                    child: Scrollbar(
-                      child: ListView.separated(
-                        itemBuilder: (context, i) => EntryListTile<E>(
-                          _entries[i],
-                          icon: widget.icon,
-                          onTap: () => BlocProvider.of<NavigationCubit>(context)
-                              .push(DatabaseEntryPathConfig.fromEntry(_entries[i])),
-                        ),
-                        separatorBuilder: (context, i) => const SizedBox(height: 8),
-                        itemCount: _entries.length,
-                        padding: const EdgeInsets.all(8),
-                        controller: _scrollController,
+      appBar: AppBar(
+        title: Text('Star Wars Db - ' + widget.title),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.search),
+            onPressed: () => BlocProvider.of<NavigationCubit>(context)
+                .push(DatabaseEntriesSearchPageConfig(entryType: widget.dataSource.entryType)),
+          ),
+        ],
+      ),
+      body: _isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : Column(
+              children: [
+                Expanded(
+                  child: Scrollbar(
+                    child: ListView.separated(
+                      itemBuilder: (context, i) => EntryListTile<E>(
+                        _entries[i],
+                        icon: widget.icon,
+                        onTap: () => BlocProvider.of<NavigationCubit>(context)
+                            .push(DatabaseEntryPathConfig.fromEntry(_entries[i])),
                       ),
+                      separatorBuilder: (context, i) => const SizedBox(height: 8),
+                      itemCount: _entries.length,
+                      padding: const EdgeInsets.all(8),
+                      controller: _scrollController,
                     ),
                   ),
-                  AnimatedCrossFade(
-                    firstChild: Container(),
-                    secondChild: Container(
-                        color: Theme.of(context).dialogBackgroundColor,
-                        padding: const EdgeInsets.symmetric(vertical: 8),
-                        child: const Center(
-                          child: CircularProgressIndicator(),
-                        )),
-                    crossFadeState: _isLoadingMore ? CrossFadeState.showSecond : CrossFadeState.showFirst,
-                    duration: const Duration(milliseconds: 300),
-                  )
-                ],
-              ));
+                ),
+                AnimatedCrossFade(
+                  firstChild: Container(),
+                  secondChild: Container(
+                      color: Theme.of(context).dialogBackgroundColor,
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      child: const Center(
+                        child: CircularProgressIndicator(),
+                      )),
+                  crossFadeState: _isLoadingMore ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+                  duration: const Duration(milliseconds: 300),
+                )
+              ],
+            ),
+    );
   }
 
-  void _scrollListener() async {
-    if (_scrollController.position.pixels + 128 > _scrollController.position.maxScrollExtent && !_isLoadingMore) {
+  Future<void> _scrollListener() async {
+    if (_isLoadingMore) return;
+
+    if (_scrollController.position.extentAfter < 150) {
       setState(() {
         _isLoadingMore = true;
       });

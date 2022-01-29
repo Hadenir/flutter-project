@@ -35,7 +35,7 @@ class EntryListTile<E extends StarWarsDbEntry> extends StatelessWidget {
               constraints: const BoxConstraints(minHeight: 64),
               child: Row(
                 children: [
-                  Icon(icon, size: 64),
+                  Icon(icon, size: 80),
                   const SizedBox(width: 8),
                   Text(entry.displayName),
                 ],

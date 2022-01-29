@@ -91,7 +91,7 @@ extension DbEntryTypeMapper on DbEntryType {
   }
 
   String getTitle() {
-    var title = toString();
+    var title = toString().split('.').last;
     return title[0].toUpperCase() + title.substring(1);
   }
 

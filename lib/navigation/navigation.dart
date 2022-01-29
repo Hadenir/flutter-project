@@ -20,12 +20,13 @@ class NavigationRouterDelegate extends RouterDelegate<StarWarsDbPageConfig>
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => _cubit,
-      child: BlocBuilder<NavigationCubit, NavigationStack>(
+      child: BlocConsumer<NavigationCubit, NavigationStack>(
         builder: (context, stack) => Navigator(
           pages: stack.pages,
           key: navigatorKey,
           onPopPage: _onPopPage,
         ),
+        listener: (context, state) => notifyListeners(),
       ),
     );
   }
@@ -51,6 +52,8 @@ class NavigationRouteInformationParser extends RouteInformationParser<StarWarsDb
     var location = routeInformation.location;
     if (location == null) return HomePageConfig();
 
+    if (location.endsWith('/')) location = location.substring(0, location.length - 1);
+
     var uri = Uri.parse(location);
     if (uri.pathSegments.isEmpty) return HomePageConfig();
 
@@ -67,9 +70,25 @@ class NavigationRouteInformationParser extends RouteInformationParser<StarWarsDb
       var id = int.tryParse(uri.pathSegments[1]);
       if (id == null) return HomePageConfig();
 
-      return DatabaseEntryPathConfig(entryType: entryType, id: id);
+      return DatabaseEntryPathConfig(entryType: entryType, entryId: id);
     }
 
     return HomePageConfig();
+  }
+
+  @override
+  RouteInformation? restoreRouteInformation(StarWarsDbPageConfig configuration) {
+    String location;
+    if (configuration is HomePageConfig) {
+      location = '';
+    } else if (configuration is DatabaseEntriesListPageConfig) {
+      location = configuration.entryType.getDataSource().entryName;
+    } else if (configuration is DatabaseEntryPathConfig) {
+      location = configuration.entryType.getDataSource().entryName + '/' + configuration.entryId.toString();
+    } else {
+      return null;
+    }
+
+    return RouteInformation(location: '/' + location);
   }
 }
