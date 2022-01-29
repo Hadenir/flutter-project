@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_project/data/starwars_entries.dart';
 import 'package:flutter_project/widgets/entry_details.dart';
 
@@ -30,6 +31,13 @@ class _PlanetDetailsScreenState extends State<PlanetDetailsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: _planet != null ? Text(_planet!.displayName) : null,
+        actions: [
+          if (_planet != null)
+            IconButton(
+              onPressed: () => Clipboard.setData(ClipboardData(text: _planet!.deeplink)),
+              icon: const Icon(Icons.link),
+            ),
+        ],
       ),
       body: _planet == null
           ? const Center(child: CircularProgressIndicator())

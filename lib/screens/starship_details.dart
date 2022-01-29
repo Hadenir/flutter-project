@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_project/data/starwars_entries.dart';
 import 'package:flutter_project/widgets/entry_details.dart';
 
@@ -30,6 +31,13 @@ class _StarshipDetailsScreenState extends State<StarshipDetailsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: _starship != null ? Text(_starship!.displayName) : null,
+        actions: [
+          if (_starship != null)
+            IconButton(
+              onPressed: () => Clipboard.setData(ClipboardData(text: _starship!.deeplink)),
+              icon: const Icon(Icons.link),
+            ),
+        ],
       ),
       body: _starship == null
           ? const Center(child: CircularProgressIndicator())

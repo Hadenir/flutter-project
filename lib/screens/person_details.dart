@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_project/data/starwars_entries.dart';
 import 'package:flutter_project/widgets/entry_details.dart';
 
@@ -30,6 +31,13 @@ class _PersonDetailsScreenState extends State<PersonDetailsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: _person != null ? Text(_person!.displayName) : null,
+        actions: [
+          if (_person != null)
+            IconButton(
+              onPressed: () => Clipboard.setData(ClipboardData(text: _person!.deeplink)),
+              icon: const Icon(Icons.link),
+            ),
+        ],
       ),
       body: _person == null
           ? const Center(child: CircularProgressIndicator())

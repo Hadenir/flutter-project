@@ -146,6 +146,8 @@ abstract class StarWarsDbEntry {
   StarWarsDbEntry(this.id, this.entryType);
 
   String get displayName;
+
+  String get deeplink;
 }
 
 class Person extends StarWarsDbEntry {
@@ -163,6 +165,9 @@ class Person extends StarWarsDbEntry {
 
   @override
   String get displayName => name;
+
+  @override
+  String get deeplink => 'swdb://starwarsdb/people/' + id.toString();
 
   Person._({
     required id,
@@ -211,6 +216,9 @@ class Film extends StarWarsDbEntry {
 
   @override
   String get displayName => title;
+
+  @override
+  String get deeplink => 'swdb://starwarsdb/films/' + id.toString();
 
   Film._({
     required id,
@@ -261,6 +269,9 @@ class Starship extends StarWarsDbEntry {
   @override
   String get displayName => name;
 
+  @override
+  String get deeplink => 'swdb://starwarsdb/starships/' + id.toString();
+
   Starship._({
     required id,
     required this.name,
@@ -307,6 +318,9 @@ class Vehicle extends StarWarsDbEntry {
   @override
   String get displayName => name;
 
+  @override
+  String get deeplink => 'swdb://starwarsdb/vehicles/' + id.toString();
+
   Vehicle._({
     required id,
     required this.name,
@@ -351,6 +365,9 @@ class Species extends StarWarsDbEntry {
 
   @override
   String get displayName => name;
+
+  @override
+  String get deeplink => 'swdb://starwarsdb/species/' + id.toString();
 
   Species._({
     required id,
@@ -398,6 +415,9 @@ class Planet extends StarWarsDbEntry {
 
   @override
   String get displayName => name;
+
+  @override
+  String get deeplink => 'swdb://starwarsdb/planets/' + id.toString();
 
   Planet._({
     required id,

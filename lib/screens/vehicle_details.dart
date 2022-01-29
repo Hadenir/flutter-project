@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_project/data/starwars_entries.dart';
 import 'package:flutter_project/widgets/entry_details.dart';
 
@@ -30,6 +31,13 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: _vehicle != null ? Text(_vehicle!.displayName) : null,
+        actions: [
+          if (_vehicle != null)
+            IconButton(
+              onPressed: () => Clipboard.setData(ClipboardData(text: _vehicle!.deeplink)),
+              icon: const Icon(Icons.link),
+            ),
+        ],
       ),
       body: _vehicle == null
           ? const Center(child: CircularProgressIndicator())

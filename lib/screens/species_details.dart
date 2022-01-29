@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_project/data/starwars_entries.dart';
 import 'package:flutter_project/widgets/entry_details.dart';
 
@@ -30,6 +31,13 @@ class _SpeciesDetailsScreenState extends State<SpeciesDetailsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: _species != null ? Text(_species!.displayName) : null,
+        actions: [
+          if (_species != null)
+            IconButton(
+              onPressed: () => Clipboard.setData(ClipboardData(text: _species!.deeplink)),
+              icon: const Icon(Icons.link),
+            ),
+        ],
       ),
       body: _species == null
           ? const Center(child: CircularProgressIndicator())

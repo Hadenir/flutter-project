@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:flutter_project/widgets/star_wars_crawl.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
@@ -32,6 +33,13 @@ class _FilmDetailsScreenState extends State<FilmDetailsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: _film != null ? Text(_film!.displayName) : null,
+        actions: [
+          if (_film != null)
+            IconButton(
+              onPressed: () => Clipboard.setData(ClipboardData(text: _film!.deeplink)),
+              icon: const Icon(Icons.link),
+            ),
+        ],
       ),
       body: _film == null
           ? const Center(child: CircularProgressIndicator())
